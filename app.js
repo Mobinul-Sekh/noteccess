@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -77,10 +77,10 @@ app.delete("/delete/:id", (req, res) => {
     });
 })
 
-if ( process.env.NODE_ENV == "production"){
+// if ( process.env.NODE_ENV == "production"){
     
-    app.use(express.static("frontend/build"));
-}
+//     app.use(express.static("frontend/build"));
+// }
 
 connectDB().then(() => {
     app.listen(PORT, function () {
