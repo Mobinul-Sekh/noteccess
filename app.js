@@ -18,13 +18,22 @@ app.get('*', function(req, res){
     res.sendFile(path.join(__dirname,"./frontend/build/index.html"));
 })
 
+// fix mongo connection.
+const connectDB = async () => {
+    try {
+      const conn = await mongoose.connect(process.env.DB_CONNECTION_STRING);
+      console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
+  }
 
-mongoose.connect(process.env.DB_CONNECTION_STRING);
-
-const connection = mongoose.connection;
-connection.once("open", () => {
-    console.log("mongodb database connection successful");
-});
+// mongoose.connect(process.env.DB_CONNECTION_STRING);
+// const connection = mongoose.connection;
+// connection.once("open", () => {
+//     console.log("mongodb database connection successful");
+// });
 
 const noteSchema = new mongoose.Schema({
     title: String,
@@ -73,6 +82,8 @@ if ( process.env.NODE_ENV == "production"){
     app.use(express.static("frontend/build"));
 }
 
-app.listen(PORT, function () {
-    console.log("server is running on port 3500..");
+connectDB().then(() => {
+    app.listen(PORT, function () {
+        console.log("server is running on port 3000..");
+    })
 })
